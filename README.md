@@ -1,4 +1,17 @@
-## EZ Make
+    M E T L I F E
+    E \         E \
+    T   \       T   \
+    L     M E T L I F E
+    I     E     I     E
+    F     T     F     T
+    M E T L I F E     L
+      \   I       \   I
+        \ F         \ F
+          M E T L I F E
+
+
+          
+## EZ CLI
 
 this script helps you generate a CRUD system for your project keeping it simple and compliant,
 with internal coding style standards
