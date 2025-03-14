@@ -1,0 +1,53 @@
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+
+namespace {{ module }}.Controllers
+{
+    [Route("api/{{ module | lower }}")]
+    [ApiController]
+    public class {{ prefix }}{{ module }}{{ suffix }}Controller : ControllerBase
+    {
+        private readonly I{{ prefix }}{{ module }}{{ suffix }}Service _service;
+
+        public {{ prefix }}{{ module }}{{ suffix }}Controller(I{{ prefix }}{{ module }}{{ suffix }}Service service)
+        {
+            _service = service;
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<{{ prefix }}{{ module }}{{ suffix }}>> GetAll()
+        {
+            return Ok(_service.GetAll());
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<{{ prefix }}{{ module }}{{ suffix }}> GetById(int id)
+        {
+            var item = _service.GetById(id);
+            if (item == null) return NotFound();
+            return Ok(item);
+        }
+
+        [HttpPost]
+        public ActionResult<{{ prefix }}{{ module }}{{ suffix }}> Create([FromBody] {{ prefix }}{{ module }}{{ suffix }} entity)
+        {
+            _service.Create(entity);
+            return CreatedAtAction(nameof(GetById), new { id = entity.Id }, entity);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] {{ prefix }}{{ module }}{{ suffix }} entity)
+        {
+            if (id != entity.Id) return BadRequest();
+            _service.Update(entity);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _service.Delete(id);
+            return NoContent();
+        }
+    }
+}

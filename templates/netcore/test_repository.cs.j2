@@ -1,0 +1,23 @@
+using Xunit;
+using {{ module }}.Repositories;
+using System.Collections.Generic;
+
+namespace {{ module }}.Tests
+{
+    public class {{ module }}RepositoryTests
+    {
+        private readonly {{ module }}Repository _repository;
+
+        public {{ module }}RepositoryTests()
+        {
+            _repository = new {{ module }}Repository();
+        }
+
+        [Fact]
+        public void GetAll_ReturnsEmptyList()
+        {
+            var result = _repository.GetAll();
+            Assert.Empty(result);
+        }
+    }
+}

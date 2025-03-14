@@ -1,0 +1,49 @@
+using System.Collections.Generic;
+
+namespace {{ module }}.Services
+{
+    public class {{ prefix }}{{ module }}{{ suffix }}Service : I{{ prefix }}{{ module }}{{ suffix }}Service
+    {
+        private readonly I{{ prefix }}{{ module }}{{ suffix }}Repository _repository;
+
+        public {{ prefix }}{{ module }}{{ suffix }}Service(I{{ prefix }}{{ module }}{{ suffix }}Repository repository)
+        {
+            _repository = repository;
+        }
+
+        public IEnumerable<{{ prefix }}{{ module }}{{ suffix }}> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
+        public {{ prefix }}{{ module }}{{ suffix }} GetById(int id)
+        {
+            return _repository.GetById(id);
+        }
+
+        public void Create({{ prefix }}{{ module }}{{ suffix }} entity)
+        {
+            _repository.Create(entity);
+        }
+
+        public void Update({{ prefix }}{{ module }}{{ suffix }} entity)
+        {
+            _repository.Update(entity);
+        }
+
+        public void Delete(int id)
+        {
+            _repository.Delete(id);
+        }
+    }
+
+    public interface I{{ prefix }}{{ module }}{{ suffix }}Service
+    {
+        IEnumerable<{{ prefix }}{{ module }}{{ suffix }}> GetAll();
+        {{ prefix }}{{ module }}{{ suffix }} GetById(int id);
+        void Create({{ prefix }}{{ module }}{{ suffix }} entity);
+        void Update({{ prefix }}{{ module }}{{ suffix }} entity);
+        void Delete(int id);
+    }
+}
+

@@ -1,0 +1,33 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using {{ module }}.Services;
+using {{ module }}.Repositories;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the DI container
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Register dependencies
+builder.Services.AddScoped<I{{ prefix }}{{ module }}{{ suffix }}Service, {{ prefix }}{{ module }}{{ suffix }}Service>();
+builder.Services.AddScoped<I{{ prefix }}{{ module }}{{ suffix }}Repository, {{ prefix }}{{ module }}{{ suffix }}Repository>();
+
+var app = builder.Build();
+
+// Enable Middleware for Routing
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseRouting();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

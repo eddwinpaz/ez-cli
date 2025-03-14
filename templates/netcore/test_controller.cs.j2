@@ -1,0 +1,29 @@
+using Xunit;
+using Moq;
+using Microsoft.AspNetCore.Mvc;
+using {{ module }}.Controllers;
+using {{ module }}.Services;
+using System.Collections.Generic;
+
+namespace {{ module }}.Tests
+{
+    public class {{ module }}ControllerTests
+    {
+        private readonly Mock<I{{ module }}Service> _mockService;
+        private readonly {{ module }}Controller _controller;
+
+        public {{ module }}ControllerTests()
+        {
+            _mockService = new Mock<I{{ module }}Service>();
+            _controller = new {{ module }}Controller(_mockService.Object);
+        }
+
+        [Fact]
+        public void GetAll_ReturnsOkResult()
+        {
+            _mockService.Setup(s => s.GetAll()).Returns(new List<{{ module }}>());
+            var result = _controller.GetAll();
+            Assert.IsType<OkObjectResult>(result);
+        }
+    }
+}

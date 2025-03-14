@@ -1,0 +1,20 @@
+{
+  "module": "Owner",
+  "fields": [
+    {
+      "name": "FirstName",
+      "type": "string",
+      "size": 50
+    },
+    {
+      "name": "LastName",
+      "type": "string",
+      "size": 50
+    },
+    {
+      "name": "Email",
+      "type": "string",
+      "size": 100
+    }
+  ]
+}

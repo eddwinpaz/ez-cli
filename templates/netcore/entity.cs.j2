@@ -1,0 +1,11 @@
+namespace {{ module }}.Models
+{
+    public class {{ prefix }}{{ module }}{{ suffix }}
+    {
+        public int Id { get; set; }
+        {% for field in fields %}
+        public {{ field.type }} {{ field.name }} { get; set; }
+        {% endfor %}
+    }
+}
+

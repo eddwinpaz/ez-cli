@@ -1,0 +1,33 @@
+{
+  "module": "Customer",
+  "fields": [
+    {
+      "name": "FirstName",
+      "type": "string",
+      "size": 50
+    },
+    {
+      "name": "LastName",
+      "type": "string",
+      "size": 50
+    },
+    {
+      "name": "Email",
+      "type": "string",
+      "size": 100
+    },
+    {
+      "name": "PhoneNumber",
+      "type": "string",
+      "size": 15
+    },
+    {
+      "name": "DateOfBirth",
+      "type": "DateTime"
+    },
+    {
+      "name": "IsActive",
+      "type": "bool"
+    }
+  ]
+}

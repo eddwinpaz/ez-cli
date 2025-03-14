@@ -1,0 +1,15 @@
+using Xunit;
+using {{ module }}.Models;
+
+namespace {{ module }}.Tests
+{
+    public class {{ module }}Tests
+    {
+        [Fact]
+        public void CanCreateEntity()
+        {
+            var entity = new {{ module }}();
+            Assert.NotNull(entity);
+        }
+    }
+}

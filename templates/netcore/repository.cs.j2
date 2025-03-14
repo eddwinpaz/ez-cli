@@ -1,0 +1,49 @@
+using System.Collections.Generic;
+using System.Linq;
+
+namespace {{ module }}.Repositories
+{
+    public class {{ prefix }}{{ module }}{{ suffix }}Repository : I{{ prefix }}{{ module }}{{ suffix }}Repository
+    {
+        private readonly List<{{ prefix }}{{ module }}{{ suffix }}> _data = new List<{{ prefix }}{{ module }}{{ suffix }}>();
+
+        public IEnumerable<{{ prefix }}{{ module }}{{ suffix }}> GetAll()
+        {
+            return _data;
+        }
+
+        public {{ prefix }}{{ module }}{{ suffix }} GetById(int id)
+        {
+            return _data.FirstOrDefault(e => e.Id == id);
+        }
+
+        public void Create({{ prefix }}{{ module }}{{ suffix }} entity)
+        {
+            _data.Add(entity);
+        }
+
+        public void Update({{ prefix }}{{ module }}{{ suffix }} entity)
+        {
+            var index = _data.FindIndex(e => e.Id == entity.Id);
+            if (index != -1)
+                _data[index] = entity;
+        }
+
+        public void Delete(int id)
+        {
+            var entity = _data.FirstOrDefault(e => e.Id == id);
+            if (entity != null)
+                _data.Remove(entity);
+        }
+    }
+
+    public interface I{{ prefix }}{{ module }}{{ suffix }}Repository
+    {
+        IEnumerable<{{ prefix }}{{ module }}{{ suffix }}> GetAll();
+        {{ prefix }}{{ module }}{{ suffix }} GetById(int id);
+        void Create({{ prefix }}{{ module }}{{ suffix }} entity);
+        void Update({{ prefix }}{{ module }}{{ suffix }} entity);
+        void Delete(int id);
+    }
+}
+

@@ -1,0 +1,28 @@
+using Xunit;
+using Moq;
+using {{ module }}.Repositories;
+using {{ module }}.Services;
+using System.Collections.Generic;
+
+namespace {{ module }}.Tests
+{
+    public class {{ module }}ServiceTests
+    {
+        private readonly Mock<I{{ module }}Repository> _mockRepo;
+        private readonly {{ module }}Service _service;
+
+        public {{ module }}ServiceTests()
+        {
+            _mockRepo = new Mock<I{{ module }}Repository>();
+            _service = new {{ module }}Service(_mockRepo.Object);
+        }
+
+        [Fact]
+        public void GetAll_ReturnsEmptyList()
+        {
+            _mockRepo.Setup(r => r.GetAll()).Returns(new List<{{ module }}>());
+            var result = _service.GetAll();
+            Assert.Empty(result);
+        }
+    }
+}
