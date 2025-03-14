@@ -1,23 +1,21 @@
 import argparse
 import json
 import os
+import glob
 from jinja2 import Environment, FileSystemLoader
+from simple_term_menu import TerminalMenu
 
-def prompt_user(prompt, choices, default=None):
-    while True:
-        print(f"{prompt}")
-        for i, choice in enumerate(choices, 1):
-            print(f"{i}. {choice}")
-        user_input = input(f"Select an option (1-{len(choices)}) [{default}]: ")
-        if not user_input and default:
-            return default
-        try:
-            selected_index = int(user_input) - 1
-            if 0 <= selected_index < len(choices):
-                return choices[selected_index]
-        except ValueError:
-            pass
-        print("Invalid selection. Please choose a valid option.")
+# Set up Jinja2 environment
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def prompt_user(prompt, choices=None, default=None):
+    if choices:
+        menu = TerminalMenu(choices, title=f"#### {prompt} ####")
+        selected_index = menu.show()
+        return choices[selected_index]
+    else:
+        user_input = input(f"#### {prompt} [{default}] ####: ")
+        return user_input.strip() or default
 
 def update_program_file(program_path, context):
     with open(program_path, 'r') as f:
@@ -55,9 +53,6 @@ def update_program_file(program_path, context):
 
     print(f"Updated {program_path} with new dependencies.")
 
-# Set up Jinja2 environment
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 def get_template_env(tech_stack):
     template_folder = os.path.join(BASE_DIR, 'templates', tech_stack)
     return Environment(loader=FileSystemLoader(template_folder))
@@ -93,11 +88,35 @@ def parse_json_schema(schema_path):
 
 # Interactive CLI setup
 def main():
-    print("EzMake Code Generator CLI")
+    print("""
+    \n
+           M E T L I F E
+           E \         E \ \r
+           T   \       T   \ \r
+           L     M E T L I F E
+           I     E     I     E
+           F     T     F     T
+           M E T L I F E     L
+             \   I       \   I
+               \ F         \ F
+                 M E T L I F E \n
+
+    \r ###########################################
+    \r ### [Internal Tool Code Generator v0.1] ###
+    \r ###########################################
+    \n
+    """)
     tech_stack = prompt_user("Select tech stack", ["netcore", "nestjs", "nano"], "netcore")
     
     module_name = input("Enter module name [Customer]: ") or "Customer"
-    entity_path = input("Enter path to JSON schema [entity.json]: ") or "entity.json"
+    
+    # Detect and list all .json files for entity selection
+    json_files = glob.glob("*.json")
+    if json_files:
+        entity_path = prompt_user("Select a JSON schema file", json_files)
+    else:
+        entity_path = prompt_user("Enter path to JSON schema", default="entity.json")
+
     file_ext = "cs" if tech_stack == "netcore" else "ts"
     output_dir = input(f"Enter output directory [{os.path.join(BASE_DIR, 'output')}]: ") or os.path.join(BASE_DIR, 'output')
     
