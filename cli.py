@@ -3,16 +3,21 @@ import json
 import os
 import glob
 from jinja2 import Environment, FileSystemLoader
-from simple_term_menu import TerminalMenu
 
 # Set up Jinja2 environment
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def prompt_user(prompt, choices=None, default=None):
     if choices:
-        menu = TerminalMenu(choices, title=f"#### {prompt} ####")
-        selected_index = menu.show()
-        return choices[selected_index]
+        print(f"#### {prompt} ####")
+        for i, choice in enumerate(choices):
+            print(f"{i + 1}. {choice}")
+        while True:
+            selection = input("Select an option by number: ").strip()
+            if selection.isdigit() and 1 <= int(selection) <= len(choices):
+                return choices[int(selection) - 1]
+            else:
+                print("Invalid selection. Please try again.")
     else:
         user_input = input(f"#### {prompt} [{default}] ####: ")
         return user_input.strip() or default
@@ -24,18 +29,15 @@ def update_program_file(program_path, context):
     new_service_line = f"builder.Services.AddScoped<I{context['prefix']}{context['module']}{context['suffix']}Service, {context['prefix']}{context['module']}{context['suffix']}Service>();\n"
     new_repository_line = f"builder.Services.AddScoped<I{context['prefix']}{context['module']}{context['suffix']}Repository, {context['prefix']}{context['module']}{context['suffix']}Repository>();\n"
 
-    # Check if service and repository already exist
     if new_service_line in lines or new_repository_line in lines:
-        return  # Prevent duplicates
+        return
 
-    # Find the correct location to insert dependencies
     insert_index = None
     for i, line in enumerate(lines):
         if "// Register dependencies" in line:
             insert_index = i + 1
             break
 
-    # If "// Register dependencies" not found, add it before the app.Build()
     if insert_index is None:
         for i, line in enumerate(lines):
             if "var app = builder.Build();" in line:
@@ -43,11 +45,9 @@ def update_program_file(program_path, context):
                 lines.insert(i, "\n// Register dependencies\n")
                 break
 
-    # Insert new dependencies
     lines.insert(insert_index, new_service_line)
     lines.insert(insert_index + 1, new_repository_line)
 
-    # Write updated content back
     with open(program_path, 'w') as f:
         f.writelines(lines)
 
@@ -57,12 +57,10 @@ def get_template_env(tech_stack):
     template_folder = os.path.join(BASE_DIR, 'templates', tech_stack)
     return Environment(loader=FileSystemLoader(template_folder))
 
-# Function to generate code from template
 def generate_code(template_env, template_name, output_path, context):
     template = template_env.get_template(template_name)
     content = template.render(context)
 
-    # Ensure Program.cs is placed at the root output directory
     if "Program" in output_path:
         program_path = os.path.join(os.path.dirname(output_path), "Program.cs")
         if os.path.exists(program_path):
@@ -77,7 +75,6 @@ def generate_code(template_env, template_name, output_path, context):
             f.write(content)
         print(f"Generated: {output_path}")
 
-# Parse JSON schema with error handling
 def parse_json_schema(schema_path):
     try:
         with open(schema_path, 'r') as f:
@@ -86,31 +83,27 @@ def parse_json_schema(schema_path):
         print(f"Error loading schema: {e}")
         exit(1)
 
-# Interactive CLI setup
 def main():
     print("""
-    \n
            M E T L I F E
-           E \         E \ \r
-           T   \       T   \ \r
+           E \         E \ 
+           T   \       T   \ 
            L     M E T L I F E
            I     E     I     E
            F     T     F     T
            M E T L I F E     L
              \   I       \   I
                \ F         \ F
-                 M E T L I F E \n
+                 M E T L I F E 
 
-    \r ###########################################
-    \r ### [Internal Tool Code Generator v0.1] ###
-    \r ###########################################
-    \n
+    ###########################################
+    ### [Internal Tool Code Generator v0.1] ###
+    ###########################################
     """)
     tech_stack = prompt_user("Select tech stack", ["netcore", "nestjs", "nano"], "netcore")
     
     module_name = input("Enter module name [Customer]: ") or "Customer"
     
-    # Detect and list all .json files for entity selection
     json_files = glob.glob("*.json")
     if json_files:
         entity_path = prompt_user("Select a JSON schema file", json_files)
@@ -135,7 +128,7 @@ def main():
         'prefix': prefix,
         'suffix': suffix
     }
-    
+
     template_mappings = {
         'netcore': {
             'program.cs.j2': '../Program',
